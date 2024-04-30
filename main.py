@@ -55,7 +55,7 @@ def create_backup(backup_dir, ha_client):
     pre_backup_files = glob.glob(backup_dir + "*.tar")
     #Do backup here
     print("Triggering new backup in HA")
-    #ha_client.trigger_service("backup", "create")
+    ha_client.trigger_service("backup", "create")
     post_backup_files = glob.glob(backup_dir + "*.tar")
 
     backup_files = []
