@@ -1,0 +1,3 @@
+boto3==1.34.94
+botocore==1.34.94
+homeassistant_api==4.2.2.post1
