@@ -4,6 +4,7 @@ WORKDIR /home/app
 
 COPY . .
 RUN chmod 0744 main.py
+RUN chmod +x entrypoint.sh
 
 RUN pip3 install --no-cache-dir -r requirements.txt
 
