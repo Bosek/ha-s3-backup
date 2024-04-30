@@ -9,4 +9,5 @@
 `HA_TOKEN`  
 `LOCAL_BACKUPS_PATH` is path to local folder with backups(`homeassistant/backups`)  
 `CRON_SCHEDULE` [generate here](https://crontab.guru/)  
+`HA_BACKUP_DATETIME_ENTITY` is a HomeAssistant entity(`input_datetime`) that will get updated with actual date and time when the backup is done  
   

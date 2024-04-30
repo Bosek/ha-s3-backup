@@ -1,6 +1,7 @@
 import glob
 import os
 import time
+from datetime import datetime
 from os import getenv
 from pathlib import Path
 import boto3
@@ -96,6 +97,18 @@ def rename_upload_remove_backup(s3_client, filename):
     print(f"Removing backup from local disk")
     os.remove(file_path.resolve())
 
+def update_backup_datetime_entity(ha_client):
+    if ((HA_BACKUP_DATETIME_ENTITY := getenv("HA_BACKUP_DATETIME_ENTITY")) is None):
+        return
+    entities = ha_client.get_entities()
+    if ("input_datetime" in entities.keys()):
+        entities_input_datetime = entities["input_datetime"].entities
+        if (HA_BACKUP_DATETIME_ENTITY in entities_input_datetime.keys()):
+            print(f"Updating input_datetime.{HA_BACKUP_DATETIME_ENTITY} entity state")
+            backup_datetime_entity = entities_input_datetime[HA_BACKUP_DATETIME_ENTITY]
+            backup_datetime_entity.state.state = datetime.now().strftime("%Y-%m-%d %H-%M-%S")
+            backup_datetime_entity.update_state()
+
 def run():
     print("Starting backup process")
     if ((LOCAL_BACKUPS_PATH := getenv("LOCAL_BACKUPS_PATH")) is None):
@@ -111,6 +124,7 @@ def run():
     
     for backup_file in files:
         rename_upload_remove_backup(s3, backup_file)
+        update_backup_datetime_entity(ha)
     
     print("Backup process done")
 
